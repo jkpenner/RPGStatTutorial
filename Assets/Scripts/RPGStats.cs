@@ -7,13 +7,19 @@ public abstract class RPGStats {
     private Dictionary<RPGStatType, RPGStat> _stats;
 
     public RPGStats() {
-        Initialize();
+        Initialize(null);
     }
 
-    public void Initialize() {
+    public RPGStats(RPGEntity entity) {
+        Initialize(entity);
+    }
+
+    public void Initialize(RPGEntity entity) {
+        entity.OnEntityLevelChange += OnEntityLevelChanged;
+
         ValidateStats();
         ConfigureStats();
-        InitializeStats();
+        InitializeStats(entity);
     }
 
     private void ValidateStats() {
@@ -22,14 +28,35 @@ public abstract class RPGStats {
         }
     }
 
-    private void InitializeStats() {
+    private void InitializeStats(RPGEntity entity) {
         foreach (KeyValuePair<RPGStatType, RPGStat> pair in _stats) {
-            // Check if the stat need to be intialized 
-            // if it does we inialize it.
+            var initStat = pair.Value as IStatInitalizable;
+            if (initStat != null) {
+                initStat.OnInitialize(entity);
+            }
+        }
+    }
+
+    public void Update(RPGEntity entity) {
+        foreach (KeyValuePair<RPGStatType, RPGStat> pair in _stats) {
+            var updateStat = pair.Value as IStatUpdatable;
+            if (updateStat != null) {
+                updateStat.OnUpdate(entity);
+            }
         }
     }
 
     protected abstract void ConfigureStats();
+
+    public void OnEntityLevelChanged(object sender, RPGEventLevelArgs args) {
+        foreach (KeyValuePair<RPGStatType, RPGStat> pair in _stats) {
+            var progStat = pair.Value as IStatProgressable;
+            if (progStat != null) {
+                progStat.UpdateStat(args.Level);
+            }
+        }
+    }
+
 
     public RPGStat GetStat(RPGStatType type) {
         RPGStat stat;
