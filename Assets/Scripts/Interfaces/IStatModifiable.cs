@@ -6,5 +6,5 @@ public interface IStatModifiable {
 
     void AddModifier(RPGStatModifier mod);
     void ClearModifiers();
-    void UpdateModifiers();
+    void UpdateModifiers(object sender, RPGEventModifierArgs args);
 }

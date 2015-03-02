@@ -8,8 +8,8 @@ public enum RPGStatType {
     Vital_Mana                  = 1002,
 
     Skill_Melee_Defence         = 2002,
-    Skill_Melee_Range           = 2003,
-    Skill_Melee_Magic           = 2004,
+    Skill_Range_Defence         = 2003,
+    Skill_Magic_Defence         = 2004,
 
     Attribute_Constitution      = 3001,
     Attribute_Speed             = 3002,
