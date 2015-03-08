@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class RPGEntity : MonoBehaviour {
     public event EventHandler<RPGEventLevelArgs> OnEntityLevelChange;
