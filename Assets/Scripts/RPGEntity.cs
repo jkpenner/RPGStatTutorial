@@ -15,7 +15,8 @@ public class RPGEntity : MonoBehaviour {
     private RPGStats _entityStats;
 
     public string EntityName {
-        get { return _entityName; }
+		get { return _entityName; }
+		set { _entityName = value; }
     }
 
     public int EntityLevel {
