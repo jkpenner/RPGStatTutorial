@@ -12,5 +12,5 @@ public class RPGEventLevelArgs : EventArgs {
     }
 
     public int Level { get { return _level; } }
-    public int LevelPrevious { get { return _level; } }
+    public int LevelPrevious { get { return _levelPrevious; } }
 }
