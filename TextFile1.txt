@@ -1,0 +1,155 @@
+﻿RPG Tutorial Series
+
+RPGStats
+
+///
+The Base stat class that will be extending in future videos
+///
+public class RPGStat {
+	private string _statName;
+	private int _statValue;
+
+	public string StatName {
+		get { return _statName; }
+		stat { _statValue = value; }
+	}
+
+	public int StatValue {
+		get { return _statValue; }
+		set { _statValue = value; }
+	}
+
+	public RPGStat() {
+		this._statName = string.Empty;
+		this._statValue = 0;
+	}
+
+	public RPGStat(string name, int value) {
+		this._statName = name;
+		this._statValue = value;
+	}
+}
+
+public enum RPGStatType {
+	None   = 0,
+    Health = 1,
+    Mana   = 2,
+}
+
+///
+Collection that will handle all the stats
+///
+public class RPGStatCollection {
+	private Dictionary<RPGStatType, RPGStat> _stats;
+
+	public RPGStatCollection() {
+		_stats = new Dictionary<RPGStatType, RPGStat>();
+		ConfigureStats();
+	}
+
+	protected virtual void ConfigureStats() {
+
+	}
+
+	public bool Contains(RPGStatType statId) {
+		return _stats.ContainKey(statId);
+	}
+
+	public RPGStat GetStat(RPGStatType statId) {
+		if(Contains(statId)) {
+			return _stats[statId];
+		}
+		return null;
+	}
+
+	public RPGStat CreateStat(RPGStatType statId) {
+		RPGStat stat = new RPGStat();
+		_stats.Add(statId, stat);
+		return stat;
+	}
+
+	protected RPGStat CreateOrGetStat(RPGStatType statId) {
+		RPGStat stat = GetStat(statId);
+		if(stat == null) {
+			stat = CreateStat(statId);
+		}
+		return null;
+	}
+}
+
+public class RGPDefaultStats : RPGStatCollection {
+	protected override void ConfigureStats() {
+		RPGStat health = CreateOrGetStat(RPGStatType.Health);
+		health.StatName = "Health";
+		health.StatValue = 100;
+
+		RPGStat mana = CreateOrGetStat(RPGStatType.Mana);
+		mana.StatName = "Mana";
+		mana.StatValue = 200;
+
+		RPGStat mana = CreateOrGetStat(2);
+		mana.StatName = "Mana";
+		mana.StatValue = 200;
+	}
+}
+
+public class RPGStatTest {
+	private RPGStatCollection stats;
+
+	pubic void Start() {
+		stats = new RPGDefaultStats();
+
+		var statTypes = Enum.GetValues(typeof(RGPStatType));
+		foreach(var statType in statTypes) {
+			RPGStat stat = stats.GetStat(statType);
+			Debug.Log(string.Format("Stat {0}'s value is {1}",
+				stat.StatName, stat.StatValue));
+		}
+	}
+}
+
+
+
+
+
+Welcome to the second tutorial in the RPG System 
+series wit the focus
+
+
+// Lambda Experesions
+
+void Start () {
+        stats = new RPGDefaultStats();
+
+        DispayStatsValue(stats);
+	}
+
+    void ForEachEnum<T>(Action<T> action) {
+        if (action != null) {
+            var statTypes = Enum.GetValues(typeof(T));
+            foreach (var statType in statTypes) {
+                action((T)statType);
+            }
+        }
+    }
+
+	void DisplayStatsValue(RPGStatCollection collection) {
+		ForEachEnum<RPGStatType>((statType) => {
+			RPGStat stat = collection.GetStat(statType);
+            if (stat != null) {
+                Debug.Log(string.Format("Stat {0}'s value is {1}",
+                    stat.StatName, stat.StatValue));
+            }
+		});
+	}
+
+
+Add to RPGStatType
+- Stamina
+- Wisdom
+
+Create
+- RPGAttribute
+- IStatScalable
+
+

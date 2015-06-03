@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RPGAttribute : RPGStatModifiable, IStatProgressable {
+public class RPGAttribute : RPGStatModifiable, IStatScalable {
     private int _statLevelValue;
 
     public int StatLevelValue {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public interface IStatProgressable {
+public interface IStatScalable {
     void UpdateStat(int level);
 }

@@ -50,7 +50,7 @@ public abstract class RPGStats {
 
     public void OnEntityLevelChanged(object sender, RPGEventLevelArgs args) {
         foreach (KeyValuePair<RPGStatType, RPGStat> pair in _stats) {
-            var progStat = pair.Value as IStatProgressable;
+            var progStat = pair.Value as IStatScalable;
             if (progStat != null) {
                 progStat.UpdateStat(args.Level);
             }
