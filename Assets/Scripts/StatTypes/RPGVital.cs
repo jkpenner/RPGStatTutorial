@@ -8,10 +8,7 @@ public class RPGVital : RPGStatModifiable, IStatLinkable {
     private List<RPGStatLinker> _linkers;
 
     public int StatLinkerValue {
-        get {
-            UpdateLinkers();
-            return _statLinkerValue; 
-        }
+        get { return _statLinkerValue; }
     }
 
     public int StatValueCurrent {
@@ -29,12 +26,8 @@ public class RPGVital : RPGStatModifiable, IStatLinkable {
     }
 
     public override int StatBaseValue {
-        get {
-            return base.StatBaseValue + StatLinkerValue;
-        }
-        set {
-            base.StatBaseValue = value;
-        }
+        get { return base.StatBaseValue + StatLinkerValue; }
+        set { base.StatBaseValue = value; }
     }
 
     public RPGVital() {
@@ -49,23 +42,38 @@ public class RPGVital : RPGStatModifiable, IStatLinkable {
 
     public void AddLinker(RPGStatLinker linker) {
         _linkers.Add(linker);
+        linker.OnValueChanged += OnLinkerValueChange;
+        UpdateLinkerValue();
+    }
+
+    public void RemoveLinker(RPGStatLinker linker) {
+        if (_linkers.Contains(linker)) {
+            linker.OnValueChanged -= OnLinkerValueChange;
+            _linkers.Remove(linker);
+            UpdateLinkerValue();
+        }
     }
 
     public void ClearLinkers() {
         _linkers.Clear();
     }
 
-    public void UpdateLinkers() {
+    public void UpdateLinkerValue() {
         ValidateLinkers();
         _statLinkerValue = 0;
         foreach (RPGStatLinker link in _linkers) {
             _statLinkerValue += link.Value;
         }
+        ValueChange();
+    }
+
+    public void OnLinkerValueChange(object sender, System.EventArgs e) {
+        UpdateLinkerValue();
     }
 
     public void ValidateLinkers() {
         if (_linkers == null) {
             _linkers = new List<RPGStatLinker>();
         }
-    }
+    }    
 }

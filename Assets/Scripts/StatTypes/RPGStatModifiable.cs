@@ -2,15 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class RPGStatModifiable : RPGStat, IStatModifiable, IStatInitalizable {
-    private List<RPGStatModifier> _statMods;
+public class RPGStatModifiable : RPGStat, IStatModifiable, IStatValueChange {
     private int _statModValue;
-
-    public RPGStatModifiable() {
-        _statModValue = 0;
-        _statMods = new List<RPGStatModifier>();
-    }
-
+    private List<RPGStatModifier> _statMods;
+    
     public override int StatValue {
         get { return StatBaseValue + StatModifierValue; }
     }
@@ -18,16 +13,25 @@ public class RPGStatModifiable : RPGStat, IStatModifiable, IStatInitalizable {
     public int StatModifierValue {
         get { return _statModValue; }
     }
+    
+    public RPGStatModifiable() {
+        _statModValue = 0;
+        _statMods = new List<RPGStatModifier>();
+    }
 
     public void AddModifier(RPGStatModifier mod) {
         _statMods.Add(mod);
+    }
+
+    public void RemoveModifier(RPGStatModifier mod) {
+        _statMods.Remove(mod);
     }
 
     public void ClearModifiers() {
         _statMods.Clear();
     }
 
-    public void UpdateModifiers(object sender, RPGEventModifierArgs args) {
+    public void UpdateModifierValue() {
         _statModValue = 0;
         float statModBaseValueAdd = 0;
         float statModBaseValuePercent = 0;
@@ -53,9 +57,14 @@ public class RPGStatModifiable : RPGStat, IStatModifiable, IStatInitalizable {
 
         _statModValue = (int)((StatBaseValue * statModBaseValuePercent) + statModBaseValueAdd);
         _statModValue += (int)((StatValue * statModTotalValuePercent) + statModTotalValueAdd);
+
+        ValueChange();
     }
 
-    public void OnInitialize(RPGEntity entity) {
-        entity.OnEntityModifierChange += UpdateModifiers;
+    public event System.EventHandler OnValueChange;
+    public void ValueChange() {
+        if (OnValueChange != null) {
+            OnValueChange(this, new System.EventArgs());
+        }
     }
 }

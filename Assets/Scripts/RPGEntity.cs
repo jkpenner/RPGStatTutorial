@@ -35,7 +35,7 @@ public class RPGEntity : MonoBehaviour {
     }
 
     void Awake() {
-        _entityStats = new RPGStatsDefault(this);
+        //_entityStats = new RPGStatsDefault(this);
     }
 
     void Update() {
